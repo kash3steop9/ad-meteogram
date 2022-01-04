@@ -67,6 +67,8 @@ class MeteogramService(hass.Hass):
         self.meteogram_url = self.BASE_URL + requests.utils.quote(json.dumps(self.meteogram_config).replace(" ", ""), safe='')
 
         self.output_path = self.args.get('outputPath') or "/config/www/meteograms/meteogram.png"
+        if not os.path.exists(os.path.dirname(self.output_path)):
+            os.makedirs(os.path.dirname(self.output_path))
 
         self.run_daily(self.load_meteogram, datetime.time(4, 40, 20))
 
