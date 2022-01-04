@@ -72,9 +72,7 @@ class MeteogramService(hass.Hass):
 
         self.run_daily(self.load_meteogram, datetime.time(4, 40, 20))
 
-        # run immediately if no current output
-        if not os.path.exists(self.output_path):
-            self.load_meteogram(None)
+        self.load_meteogram(None)
 
     def load_meteogram(self, kwargs):
         try:
