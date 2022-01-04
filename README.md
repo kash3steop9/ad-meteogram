@@ -17,3 +17,12 @@ You can then render it with a simple picture card:
 type: picture
 image: /local/meteograms/meteogram.png
 ```
+
+Even better, create a camera entity in `configuration.yaml`:
+
+```yaml
+camera:
+  - platform: generic
+    name: Meteogram
+    still_image_url: https://127.0.0.1:8123/local/meteograms/meteogram.png
+```
