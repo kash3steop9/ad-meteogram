@@ -4,6 +4,7 @@ import requests
 import json
 import datetime
 
+
 class MeteogramService(hass.Hass):
     BASE_URL = "https://nodeserver.cloud3squared.com/getMeteogram/"
 
@@ -22,51 +23,32 @@ class MeteogramService(hass.Hass):
             "countryCodeLang": self.args.get("countryCode") or "US",
             "appLocale": "auto",
             "theme": self.args.get("theme") or "fully-transparent",
-            "chartFont": {
-                "group": "Noto",
-                "family": "Noto Sans",
-                "size": "11"
-            },
-            "chartSpacing": {
-                "": "20"
-            },
+            "chartFont": {"group": "Noto", "family": "Noto Sans", "size": "11"},
+            "chartSpacing": {"": "20"},
             "hierarchical": "true",
-            "daylightBandsWeekendColorDiff": "true",
             "provider": {
                 "": "met.no",
                 "b": "none",
                 "keyKnmi": "-",
                 "keyPirate": "-",
                 "averaging": "false",
-                "transition": "0"
+                "transition": "0",
             },
-            "hoursToDisplay": "162",
-            "hoursAvailable": "162",
-            "headerLocation": "false",
-            "headerTemperature": "false",
-            "headerMoonPhase": "false",
-            "headerUpdateTime": "false",
-            "precipitationSeries": "expected",
-            "precipitationAxisMin": "0",
-            "precipitationAxisMax": "30",
-            "precipitationAxisScale": "fixed",
-            "pressure": "false",
-            "cloudLayers": "true",
-            "cloudLayersSharedColor": "true",
-            "windSpeed": "true",
-            "windSpeedMinMaxLabels": "false",
-            "windSpeedUnit": self.args.get("windSpeedUnit") or "m/s",
-            "windSpeedColor": "#ddc0c0c0",
-            "windSpeedAxisMin": "0",
-            "windSpeedAxisMax": "40",
-            "windSpeedAxisScale": "fixed",
-            "windArrows": "false",
-            "compressionQuality": "90.0"
+            "timeRange": {
+                "hours": [0, 120],
+                "days": [-1, 4],
+                "extended": "true",
+                "autoScale": "true",
+            },
         }
 
-        self.meteogram_url = self.BASE_URL + requests.utils.quote(json.dumps(self.meteogram_config).replace(" ", ""), safe='')
+        self.meteogram_url = self.BASE_URL + requests.utils.quote(
+            json.dumps(self.meteogram_config).replace(" ", ""), safe=""
+        )
 
-        self.output_path = self.args.get('outputPath') or "/config/www/meteograms/meteogram.png"
+        self.output_path = (
+            self.args.get("outputPath") or "/config/www/meteograms/meteogram.png"
+        )
         if not os.path.exists(os.path.dirname(self.output_path)):
             os.makedirs(os.path.dirname(self.output_path))
 
@@ -80,12 +62,12 @@ class MeteogramService(hass.Hass):
         except Exception as err:
             # catch connection error - r does not get a status code then
             self.log("Unable to fetch meteogram: %s", err, stack_info=True)
-            
+
             # try again in 2 minutes
             self.run_in(self.load_meteogram, 120)
         else:
             if r.status_code == 200:
-                with open(self.output_path, 'wb') as fp:
+                with open(self.output_path, "wb") as fp:
                     fp.write(r.content)
             else:
                 self.log("Unable to fetch meteogram: HTTP %s", r.status_code)
