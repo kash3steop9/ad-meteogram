@@ -76,7 +76,7 @@ class MeteogramService(hass.Hass):
 
     def load_meteogram(self, kwargs):
         try:
-            r = requests.get(self.url_meteograms, allow_redirects=True)
+            r = requests.get(self.meteogram_url, allow_redirects=True)
         except Exception as err:
             # catch connection error - r does not get a status code then
             self.log("Unable to fetch meteogram: %s", err, stack_info=True)
