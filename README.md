@@ -8,6 +8,7 @@ meteogram:
   class: MeteogramService
   dependencies: sentry
   token: !secret meteogram_token
+  placeName: Home
 ```
 
 You can then render it with a simple picture card:
