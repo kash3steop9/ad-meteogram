@@ -24,5 +24,6 @@ Even better, create a camera entity in `configuration.yaml`:
 camera:
   - platform: generic
     name: Meteogram
-    still_image_url: http://127.0.0.1:8123/local/meteograms/meteogram.png
+    still_image_url: https://127.0.0.1:8123/local/meteograms/meteogram.png
+    verify_ssl: false
 ```
